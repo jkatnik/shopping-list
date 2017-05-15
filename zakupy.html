@@ -1,5 +1,7 @@
-<div ng-controller="ShoppingCtrl as ctrl" style="column-count: 3">
+<div ng-controller="ShoppingCtrl as ctrl">
 	<div ng-repeat="item in ctrl.items" class="item">
-		{{ item.name }}
+		<button ng-class="['btn', ctrl.bought(item)]" ng-click="item.bought = !item.bought">
+			{{ item.name }}
+		</button>
 	</div>
 </div>

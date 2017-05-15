@@ -1,4 +1,4 @@
-<div ng-controller="ShoppingListCtrl as ctrl" style="column-count: 3">
+<div ng-controller="ShoppingListCtrl as ctrl">
 	<div ng-repeat="item in ctrl.items" class="item">
 		<button ng-click="item.selected=!item.selected" ng-class="['btn', ctrl.selected(item)]">
 			{{ item.name }}

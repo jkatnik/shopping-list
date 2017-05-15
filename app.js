@@ -28,7 +28,6 @@
 		ctrl.selected = function(item) {
 			return item.selected ? 'btn-success' : 'btn-primary';
 		}
-
 	}
 
 	function ShoppingListService() {
@@ -50,6 +49,10 @@
 	function ShoppingCtrl(shoppingListService) {
 		var ctrl = this;
 		ctrl.items = shoppingListService.getSelectedItems();
+
+		ctrl.bought = function(item) {
+			return item.bought ? 'btn-success' : 'btn-danger';
+		}
 	}
 
 
