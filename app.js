@@ -20,10 +20,19 @@
 		.controller('ShoppingCtrl', ShoppingCtrl)
 		.service('shoppingListService', ShoppingListService);
 
-	ShoppingListCtrl.$inject = ['shoppingListService'];
-	function ShoppingListCtrl(shoppingListService) {
+	ShoppingListCtrl.$inject = ['shoppingListService', '$http'];
+	function ShoppingListCtrl(shoppingListService, $http) {
 		var ctrl = this;
+
+
 		ctrl.items = shoppingListService.getItems();
+
+		$http
+			.get('http://katnik.pl/shopping-list/ctrl.php?action=wczytaj')
+			.then(function (resp) {
+				ctrl.items = resp.data.items;
+			})
+
 
 		ctrl.selected = function(item) {
 			return item.selected ? 'btn-success' : 'btn-primary';
