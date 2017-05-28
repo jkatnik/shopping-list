@@ -1,6 +1,6 @@
 <div ng-controller="ShoppingCtrl as ctrl">
 	<div ng-repeat="item in ctrl.items" class="item">
-		<button ng-class="['btn', ctrl.bought(item)]" ng-click="item.bought = !item.bought">
+		<button ng-class="['btn', ctrl.bought(item)]" ng-click="ctrl.toggle(item)">
 			{{ item.name }}
 		</button>
 	</div>

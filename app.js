@@ -13,44 +13,70 @@
 				.state({
 					name: 'zakupy',
 					url: '/zakupy',
-					templateUrl: 'zakupy.html'	
+					templateUrl: 'zakupy.html'
 				});
 		})
 		.controller('ShoppingListCtrl', ShoppingListCtrl)
 		.controller('ShoppingCtrl', ShoppingCtrl)
-		.service('shoppingListService', ShoppingListService);
+		.service('shoppingListService', ShoppingListService)
+		.constant('apiBasePath', 'http://katnik.pl/shopping-list');
 
-	ShoppingListCtrl.$inject = ['shoppingListService', '$http'];
-	function ShoppingListCtrl(shoppingListService, $http) {
+	ShoppingListCtrl.$inject = ['shoppingListService', 'apiBasePath'];
+	function ShoppingListCtrl(shoppingListService, apiBasePath) {
 		var ctrl = this;
 
-
-		ctrl.items = shoppingListService.getItems();
-
-		$http
-			.get('http://katnik.pl/shopping-list/ctrl.php?action=wczytaj')
-			.then(function (resp) {
-				ctrl.items = resp.data.items;
-			})
-
+		shoppingListService.getItems().then(function(items) {
+			console.log('getItems in ShoppingListCtrl');
+			ctrl.items = items;
+		});
 
 		ctrl.selected = function(item) {
 			return item.selected ? 'btn-success' : 'btn-primary';
 		}
+
+		ctrl.toggle = function(item) {
+			item.selected = !item.selected;
+			shoppingListService.updateSelection(item);
+		}
 	}
 
-	function ShoppingListService() {
+
+	ShoppingListService.$inject = ['$http', 'apiBasePath', '$q'];
+	function ShoppingListService($http, apiBasePath, $q) {
 		var service = this;
-		service.list = ITEMS;
+		service.list = [];
 
 		service.getItems = function() {
-			return service.list;
+			return $http.get(apiBasePath + '/ctrl.php?action=wczytaj')
+				.then(function (response) {
+					service.list = response.data.items;
+					return service.list;
+				});
 		}
 
 		service.getSelectedItems = function() {
 			return service.list.filter(function (item) {
 				return item.selected
 			});
+		}
+
+		service.updateSelection = function(item) {
+			$http
+				.get(apiBasePath + '/ctrl.php?action=selected', {
+					params: {
+						id: item.id,
+						selected: item.selected
+					}
+				});
+		}
+		service.updateBought = function (item) {
+			$http
+				.get(apiBasePath + '/ctrl.php?action=bought', {
+					params: {
+						id: item.id,
+						bought: item.bought
+					}
+				});
 		}
 	}
 
@@ -62,76 +88,100 @@
 		ctrl.bought = function(item) {
 			return item.bought ? 'btn-success' : 'btn-danger';
 		}
+
+		ctrl.toggle = function(item) {
+			item.bought = !item.bought;
+			shoppingListService.updateBought(item);
+		}
 	}
-
-
-
-
-
-	var ITEMS = [{ id: '', name: 'Jabłka', selected: false},
-		{ id: '', name: 'Papryka', selected: false},
-		{ id: '', name: 'Bakłażan', selected: false},
-		{ id: '', name: 'Pomidory', selected: false},
-		{ id: '', name: 'Pieczarki', selected: false},
-		{ id: '', name: 'Szczypiorek', selected: false},
-		{ id: '', name: 'Natka pietruszki', selected: false},
-		{ id: '', name: 'Rzodkiewka', selected: false},
-		{ id: '', name: 'Sałata', selected: false},
-		{ id: '', name: 'Koperek', selected: false},
-		{ id: '', name: 'Seler', selected: false},
-		{ id: '', name: 'Pietruszka', selected: false},
-		{ id: '', name: 'Cebula', selected: false},
-		{ id: '', name: 'Ziemniaki', selected: false},
-		{ id: '', name: 'Kiwi', selected: false},
-		{ id: '', name: 'Pomarańcze', selected: false},
-		{ id: '', name: 'Cytryny', selected: false},
-		{ id: '', name: 'Grejfruty', selected: false},
-		{ id: '', name: 'Banany', selected: false},
-		{ id: '', name: 'Gruszki', selected: false},
-		{ id: '', name: 'bułki hotdogowe', selected: false},
-		{ id: '', name: 'wafle ryżowe', selected: false},
-		{ id: '', name: 'groszek ptysiowy', selected: false},
-		{ id: '', name: 'mąka', selected: false},
-		{ id: '', name: 'cukier', selected: false},
-		{ id: '', name: 'makaron', selected: false},
-		{ id: '', name: 'Ryż', selected: false},
-		{ id: '', name: 'Kasza', selected: false},
-		{ id: '', name: 'Kasza manna', selected: false},
-		{ id: '', name: 'przecier pomidorowy w kartoniku', selected: false},
-		{ id: '', name: 'pomidory w puszce całe', selected: false},
-		{ id: '', name: 'ketchup', selected: false},
-		{ id: '', name: 'kawa', selected: false},
-		{ id: '', name: 'Cacao', selected: false},
-		{ id: '', name: 'masło', selected: false},
-		{ id: '', name: 'śmietana', selected: false},
-		{ id: '', name: 'jogurty', selected: false},
-		{ id: '', name: 'serek wiejski', selected: false},
-		{ id: '', name: 'ser ulubiony', selected: false},
-		{ id: '', name: 'ser śmietankowy', selected: false},
-		{ id: '', name: 'Nesquick', selected: false},
-		{ id: '', name: 'Cornfalkes', selected: false},
-		{ id: '', name: 'Makrela w sosie pomidorowym', selected: false},
-		{ id: '', name: 'Sok ananasowy', selected: false},
-		{ id: '', name: 'jajka', selected: false},
-		{ id: '', name: 'makrela', selected: false},
-		{ id: '', name: 'sałatki', selected: false},
-		{ id: '', name: 'pierogi', selected: false},
-		{ id: '', name: 'Ser żółty', selected: false},
-		{ id: '', name: 'wędliny', selected: false},
-		{ id: '', name: 'kurczak', selected: false},
-		{ id: '', name: 'mięso', selected: false},
-		{ id: '', name: 'mrożonki', selected: false},
-		{ id: '', name: 'pizza', selected: false},
-		{ id: '', name: 'woda', selected: false},
-		{ id: '', name: 'piwo', selected: false},
-		{ id: '', name: 'Antyperspirant', selected: false},
-		{ id: '', name: 'Mydło', selected: false},
-		{ id: '', name: 'Szampon', selected: false},
-		{ id: '', name: 'Szczoteczki do zębów', selected: false},
-		{ id: '', name: 'Pasta do zębów', selected: false},
-		{ id: '', name: 'Worki', selected: false},
-		{ id: '', name: 'Ściereczki', selected: false},
-		{ id: '', name: 'Gąbki', selected: false},
-		{ id: '', name: 'Plyn do naczyń', selected: false}];
-
 })();
+/*
+Jabłka
+Papryka
+Bakłażan
+Pomidory
+Pieczarki
+Por
+Szczypiorek
+Natka pietruszki
+Rzodkiewka
+Sałata
+Koperek
+Seler
+Pietruszka
+Cebula
+Ziemniaki
+Kiwi
+Pomarańcze
+Cytryny
+Grejfruty
+Banany
+Gruszki
+bułki hotdogowe
+wafle ryżowe
+groszek ptysiowy
+mąka tortowa
+mąka zieminiaczana
+cukier
+cukier puder
+makaron
+konfirura jagodowa
+konfirura wiśniowa
+kukurydza w puszce
+groszek w puszce
+fasola cayene
+Ryż
+Kasza
+Kasza manna
+przecier pomidorowy w kartoniku
+pomidory w puszce całe
+ketchup
+Kamis grill klasyczny
+Kamis grill ziołowy
+cukier waniliowy
+kawa
+Cacao
+masło
+śmietana
+jogurty
+serek wiejski
+ser ulubiony
+ser śmietankowy
+serek topiony śmietankowy Hohland
+cukierki do słoików
+Nesquick
+Cornfalkes
+Makrela w sosie pomidorowym
+Sok ananasowy
+jajka
+makrela
+sałatki
+pierogi z mięsem
+pierogi ruskie
+Ser żółty
+wędliny
+kurczak - noga
+kurczak - pierś
+mięso
+mrożonki
+pizza
+woda
+piwo
+kabanosy
+folia aluminiowa
+papier do pieczenia
+woreczki śniadaniowe
+Worki
+Ściereczki
+Gąbki
+Ajax do podłóg
+Plyn do naczyń
+Papier toaletowy
+lenor sensitive
+Antyperspirant
+Mydło
+Szampon
+Szczoteczki do zębów
+Pasta do zębów
+
+*/
