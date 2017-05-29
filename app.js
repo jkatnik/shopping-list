@@ -30,10 +30,6 @@
 			ctrl.items = items;
 		});
 
-		ctrl.selected = function(item) {
-			return item.selected ? 'btn-success' : 'btn-primary';
-		}
-
 		ctrl.toggle = function(item) {
 			item.selected = !item.selected;
 			shoppingListService.updateSelection(item);

@@ -10,7 +10,7 @@
 
 	<script type="text/javascript" src="angular.min.js"></script>
 	<script src="js/angular-ui-router.js"></script>
-	
+
 	<script type="text/javascript" src="app.js"></script>
 
 	<style type="text/css">
@@ -21,18 +21,16 @@
 </head>
 <body>
 	<div class="container">
-		<nav>
-			<ul class="nav nav-tabs">
-			  <li role="presentation">
-			  	<a ui-sref="edycja" ui-sref-active="active">Edycja</a>
-			  </li>
-			  <li role="presentation">
-			  	<a ui-sref="zakupy" ui-sref-active="active">Zakupy</a>
-			  </li>
-			</ul>
+		<nav class="navbar navbar-default">
+  		<div class="container-fluid">
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<button type="button" class="btn btn-default navbar-btn" ui-sref="edycja" ui-sref-active="active">Edycja</button>
+					<button type="button" class="btn btn-default navbar-btn" ui-sref="zakupy" ui-sref-active="active">Zakupy</button>
+				</div>
+			</div>
 		</nav>
+
 		<ui-view></ui-view>
 	</div>
-
 </body>
 </html>
