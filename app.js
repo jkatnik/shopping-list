@@ -85,10 +85,6 @@
 		var ctrl = this;
 		ctrl.items = shoppingListService.getSelectedItems();
 
-		ctrl.bought = function(item) {
-			return item.bought ? 'btn-success' : 'btn-danger';
-		}
-
 		ctrl.toggle = function(item) {
 			item.bought = !item.bought;
 			shoppingListService.updateBought(item);
