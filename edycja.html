@@ -1,7 +1,7 @@
 <div ng-controller="ShoppingListCtrl as ctrl">
 	<div ng-repeat="item in ctrl.items" class="item">
 		<button ng-click="ctrl.toggle(item)" ng-class="{true:'btn btn-success', false: 'btn btn-primary'}[item.selected]">
-			<span class="glyphicon glyphicon-ok" aria-hidden="true" ng-if="item.selected"></span> {{ item.name }}
+			<span class="glyphicon glyphicon-ok" aria-hidden="true" ng-if="item.selected"></span>
 			{{ item.name }}
 		</button>
 	</div>

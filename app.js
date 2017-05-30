@@ -32,6 +32,7 @@
 
 		ctrl.toggle = function(item) {
 			item.selected = !item.selected;
+			item.bought = item.bought && item.selected;
 			shoppingListService.updateSelection(item);
 		}
 	}
@@ -58,16 +59,17 @@
 
 		service.updateSelection = function(item) {
 			$http
-				.get(apiBasePath + '/ctrl.php?action=selected', {
+				.get(apiBasePath + '/ctrl.php?action=przelacz', {
 					params: {
 						id: item.id,
-						selected: item.selected
+						selected: item.selected,
+						bought: false
 					}
 				});
 		}
 		service.updateBought = function (item) {
 			$http
-				.get(apiBasePath + '/ctrl.php?action=bought', {
+				.get(apiBasePath + '/ctrl.php?action=przelacz', {
 					params: {
 						id: item.id,
 						bought: item.bought
@@ -87,93 +89,3 @@
 		}
 	}
 })();
-/*
-Jabłka
-Papryka
-Bakłażan
-Pomidory
-Pieczarki
-Por
-Szczypiorek
-Natka pietruszki
-Rzodkiewka
-Sałata
-Koperek
-Seler
-Pietruszka
-Cebula
-Ziemniaki
-Kiwi
-Pomarańcze
-Cytryny
-Grejfruty
-Banany
-Gruszki
-bułki hotdogowe
-wafle ryżowe
-groszek ptysiowy
-mąka tortowa
-mąka zieminiaczana
-cukier
-cukier puder
-makaron
-konfirura jagodowa
-konfirura wiśniowa
-kukurydza w puszce
-groszek w puszce
-fasola cayene
-Ryż
-Kasza
-Kasza manna
-przecier pomidorowy w kartoniku
-pomidory w puszce całe
-ketchup
-Kamis grill klasyczny
-Kamis grill ziołowy
-cukier waniliowy
-kawa
-Cacao
-masło
-śmietana
-jogurty
-serek wiejski
-ser ulubiony
-ser śmietankowy
-serek topiony śmietankowy Hohland
-cukierki do słoików
-Nesquick
-Cornfalkes
-Makrela w sosie pomidorowym
-Sok ananasowy
-jajka
-makrela
-sałatki
-pierogi z mięsem
-pierogi ruskie
-Ser żółty
-wędliny
-kurczak - noga
-kurczak - pierś
-mięso
-mrożonki
-pizza
-woda
-piwo
-kabanosy
-folia aluminiowa
-papier do pieczenia
-woreczki śniadaniowe
-Worki
-Ściereczki
-Gąbki
-Ajax do podłóg
-Plyn do naczyń
-Papier toaletowy
-lenor sensitive
-Antyperspirant
-Mydło
-Szampon
-Szczoteczki do zębów
-Pasta do zębów
-
-*/
