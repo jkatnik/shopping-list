@@ -24,6 +24,7 @@
 	ShoppingListCtrl.$inject = ['shoppingListService', 'apiBasePath'];
 	function ShoppingListCtrl(shoppingListService, apiBasePath) {
 		var ctrl = this;
+		ctrl.search = '';
 
 		shoppingListService.getItems().then(function(items) {
 			console.log('getItems in ShoppingListCtrl');
@@ -34,6 +35,10 @@
 			item.selected = !item.selected;
 			item.bought = item.bought && item.selected;
 			shoppingListService.updateSelection(item);
+		}
+
+		ctrl.newItem = function(itemName) {
+			shoppingListService.add(itemName);
 		}
 	}
 
@@ -74,6 +79,18 @@
 						id: item.id,
 						bought: item.bought
 					}
+				});
+		}
+
+		service.add = function (itemName) {
+			$http
+				.get(apiBasePath + '/ctrl.php?action=dodaj', {
+					params: {
+						name: itemName
+					}
+				})
+				.then(function (response) {
+					service.list.push(response.data);
 				});
 		}
 	}
